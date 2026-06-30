@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jejak Makna: Eksplorasi Puisi SMP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .hidden-section { display: none; }
+    </style>
+</head>
+<body class="bg-indigo-50 min-h-screen text-gray-800 font-sans">
+
+    <nav class="bg-indigo-700 text-white p-4 shadow-lg sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <h1 class="font-bold text-xl">Jejak Makna 🖋️</h1>
+            <div class="space-x-4 text-sm">
+                <button onclick="showSection('home')" class="hover:text-indigo-200">Beranda</button>
+                <button onclick="showSection('materi')" class="hover:text-indigo-200">Materi</button>
+                <button onclick="showSection('kuis')" class="hover:text-indigo-200">Kuis</button>
+                <button onclick="showSection('lab')" class="hover:text-indigo-200">Lab Kreatif</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto p-6 md:p-10">
+        
+        <!-- Home Section -->
+        <section id="home" class="fade-in">
+            <div class="bg-white p-8 rounded-2xl shadow-md border-t-8 border-indigo-500">
+                <h2 class="text-3xl font-bold mb-4">Selamat Datang, Penyair Muda!</h2>
+                <p class="text-gray-600 mb-6">Di media "Jejak Makna" ini, kamu akan menjelajahi dunia puisi dengan cara yang seru. Pilih menu di atas untuk mulai belajar, menguji pemahaman, atau menciptakan karyamu sendiri.</p>
+                <button onclick="showSection('materi')" class="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition">Mulai Petualangan</button>
+            </div>
+        </section>
+
+        <!-- Materi Section -->
+        <section id="materi" class="hidden-section fade-in">
+            <h2 class="text-2xl font-bold mb-6">Materi: Unsur Puisi</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow">
+                    <h3 class="font-bold text-indigo-700 mb-2">Unsur Fisik</h3>
+                    <p class="text-sm text-gray-600">Terdiri dari Diksi (pilihan kata), Imaji (daya bayang), Kata Konkret, Majas, dan Rima.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow">
+                    <h3 class="font-bold text-indigo-700 mb-2">Unsur Batin</h3>
+                    <p class="text-sm text-gray-600">Terdiri dari Tema (makna pokok), Rasa (perasaan penyair), Nada, dan Amanat (pesan moral).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Kuis Section -->
+        <section id="kuis" class="hidden-section fade-in">
+            <div id="quiz-container" class="bg-white p-8 rounded-2xl shadow-md">
+                <h2 class="text-2xl font-bold mb-4">Kuis Cepat</h2>
+                <div id="quiz-content">
+                    <p id="question" class="mb-4 text-lg">Memuat pertanyaan...</p>
+                    <div id="options" class="grid gap-3"></div>
+                </div>
+                <div id="result" class="hidden-section mt-4 p-4 bg-green-100 rounded text-green-800"></div>
+            </div>
+        </section>
+
+        <!-- Lab Kreatif Section -->
+        <section id="lab" class="hidden-section fade-in">
+            <div class="bg-white p-8 rounded-2xl shadow-md">
+                <h2 class="text-2xl font-bold mb-4">Lab Kreatif: Generator Puisi</h2>
+                <p class="mb-4 text-sm text-gray-600">Isi titik-titik di bawah untuk membuat puisi singkat secara otomatis!</p>
+                <div class="space-y-4">
+                    <input type="text" id="subjek" placeholder="Subjek (misal: Hujan)" class="w-full p-2 border rounded">
+                    <input type="text" id="sifat" placeholder="Sifat (misal: Dingin)" class="w-full p-2 border rounded">
+                    <button onclick="generatePoem()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Buat Puisi</button>
+                    <div id="poem-result" class="mt-4 p-4 bg-indigo-50 border-l-4 border-indigo-500 italic"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        function showSection(id) {
+            document.querySelectorAll('main section').forEach(s => s.classList.add('hidden-section'));
+            document.getElementById(id).classList.remove('hidden-section');
+        }
+
+        const quizData = [
+            { q: "Apa yang dimaksud dengan Diksi dalam puisi?", a: ["Pilihan kata", "Irama lagu", "Gaya berjalan"], correct: 0 },
+            { q: "Pesan moral yang ingin disampaikan penyair disebut?", a: ["Tema", "Amanat", "Nada"], correct: 1 }
+        ];
+
+        let currentQ = 0;
+        function renderQuiz() {
+            const container = document.getElementById('options');
+            container.innerHTML = '';
+            document.getElementById('question').innerText = quizData[currentQ].q;
+            quizData[currentQ].a.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'p-3 bg-indigo-50 hover:bg-indigo-100 rounded text-left transition';
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    if(idx === quizData[currentQ].correct) alert("Benar!");
+                    else alert("Kurang tepat, coba lagi!");
+                };
+                container.appendChild(btn);
+            });
+        }
+        renderQuiz();
+
+        function generatePoem() {
+            const s = document.getElementById('subjek').value || "...";
+            const f = document.getElementById('sifat').value || "...";
+            document.getElementById('poem-result').innerHTML = `Oh ${s},<br>Begitu ${f} kau menyapa,<br>Menyentuh kalbu tanpa suara.`;
+        }
+    </script>
+</body>
+</html>
